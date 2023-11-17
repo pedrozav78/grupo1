@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from 'react';
 import { RenderUser } from './RenderUser';
 
-export const Registro = () => {
+export const Registro = (props) => {
   const [nombre, setNombre] = useState('');
   const [apellido, setApellido] = useState('');
   const [email, setEmail] = useState('');

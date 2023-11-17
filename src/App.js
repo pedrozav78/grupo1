@@ -1,6 +1,7 @@
 import './App.css';
 import React, { useState, useEffect } from 'react';
 import { Registro } from './components/Registro';
+import { RenderUser } from './components/RenderUser';
 
 function App() {
   const [users, setUsers] = useState([]);

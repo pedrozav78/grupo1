@@ -1,9 +1,9 @@
 import React from 'react';
 
-export const RenderUser = ({ users }) => {
+export const RenderUser = (props) => {
   return (
     <div>
-      {users.map((usuario, index) => (
+      {props.user && props.user.map((usuario, index) => (
         <div key={index}>
           <p>Nombre: {usuario.nombre}</p>
           <p>Apellido: {usuario.apellido}</p>
