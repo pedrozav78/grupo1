@@ -5,8 +5,8 @@ export const RenderUser = (props) => {
     <div>
       {props.user && props.user.map((usuario, index) => (
         <div key={index}>
-          <p>Nombre: {usuario.nombre}</p>
-          <p>Apellido: {usuario.apellido}</p>
+          <p>Nombre: {usuario.username}</p>
+          <p>Apellido: {usuario.password}</p>
           <p>Email: {usuario.email}</p>
         </div>
       ))}

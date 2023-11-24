@@ -15,7 +15,7 @@ export const Registro = (props) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ nombre, apellido, email }),
+      body: JSON.stringify({ username: nombre, password: apellido, email }),
     })
       .then(response => response.json())
       .then(data => {
