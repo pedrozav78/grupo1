@@ -1,75 +1,99 @@
-import React, { Fragment, useState } from 'react';
-import { RenderUser } from './RenderUser';
+import React, { Fragment, useState } from "react";
+import { RenderUser } from "./RenderUser";
 
 export const Registro = (props) => {
-  const [usuario, setNombre] = useState('');
-  const [clave, setApellido] = useState('');
-  const [email, setEmail] = useState('');
+  const [usuario, setNombre] = useState("");
+  const [clave, setApellido] = useState("");
+  const [email, setEmail] = useState("");
   const [estado, setEstado] = useState([]);
 
   function addUser(e) {
     e.preventDefault();
 
-    fetch('http://localhost:8000/auth/signup', {
-      method: 'POST',
+    fetch("http://localhost:8000/auth/signup", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ username: usuario, password: clave, email }),
     })
-      .then(response => response.json())
-      .then(data => {
-        console.log('User added successfully:', data);
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("User added successfully:", data);
         setEstado([...estado, data]); // Actualizar el estado con el nuevo usuario
       })
-      .catch(error => console.error('Error adding user:', error));
+      .catch((error) => console.error("Error adding user:", error));
   }
 
   return (
-    <div className="flex flex-row">
-      <Fragment>
-        <form onSubmit={(e) => addUser(e)}>
-          <div className="basis-1/2">
-            <input
-              onChange={(e) => setNombre(e.target.value)}
-              className="rounded-r-3xl"
-              type="text"
-              id="nombre"
-              name="nombre"
-              placeholder='Nombre'
-            />
-          </div>
-          <br />
-          <div className="basis-1/2">
-            <input
-              onChange={(e) => setApellido(e.target.value)}
-              className="rounded-r-3xl"
-              type="text"
-              id="apellido"
-              name="apellido"
-              placeholder='apellido'
-            />
-          </div>
-          <br />
-          <div className="basis-1/2">
-            <input
-              onChange={(e) => setEmail(e.target.value)}
-              className="rounded-r-3xl"
-              type="text"
-              id="email"
-              name="email"
-              placeholder='Email'
-            />
-          </div>
-          <br />
-          <button type="submit" className="bg-sky-700 px-4 py-2 rounded-r-3xl text-white hover:bg-sky-800 sm:px-8 sm:py-3">Registrarme</button>
-        </form>
-      </Fragment>
-      <RenderUser user={estado} />
+    <div className="flex justify-center items-center h-screen bg-blue-800">
+      <div className="w-96 p-6 shadow-lg bg-white rounded-md">
+        <h1 className="text-3xl block text-center font-semibold">
+          <i className="fa-solid fa-user"></i> Registro
+        </h1>
+        <hr className="mt-3"></hr>
+        <Fragment>
+          <form onSubmit={(e) => addUser(e)}>
+            <div className="mt-3">
+              <label for="nombre" className="block text-base mb-2">
+                Nombre
+              </label>
+              <input
+                onChange={(e) => setNombre(e.target.value)}
+                className="border w-full text-base px-2 py-1 focus:outline-none focus:ring-0 focus:shadow-black focus:shadow-md rounded-md border-gray-500"
+                type="text"
+                id="nombre"
+                name="nombre"
+                placeholder="Nombre"
+              />
+            </div>
+            <div className="mt-3">
+              <label for="apellido" className="block text-base mb-2">
+                Apellido
+              </label>
+              <input
+                onChange={(e) => setApellido(e.target.value)}
+                className="border w-full text-base px-2 py-1 focus:outline-none focus:ring-0 focus:shadow-black focus:shadow-md rounded-md border-gray-500"
+                type="text"
+                id="apellido"
+                name="apellido"
+                placeholder="Apellido"
+              />
+            </div>
+            <div className="mt-3">
+              <label for="email" className="block text-base mb-2">
+                Correo
+              </label>
+              <input
+                onChange={(e) => setEmail(e.target.value)}
+                className="border w-full text-base px-2 py-1 focus:outline-none focus:ring-0 focus:shadow-black focus:shadow-md rounded-md border-gray-500"
+                type="text"
+                id="email"
+                name="email"
+                placeholder="Email"
+              />
+            </div>
+            <div className="mt-3 flex">
+              <div>
+                <a href="#" className="text-indigo-800 font-semibold">
+                  Forgot Password?
+                </a>
+              </div>
+            </div>
+            <div className="mt-5">
+              <button
+                type="submit"
+                className="border-2 border-blue-700 bg-blue-700 text-white py-1 w-full rounded-md hover:bg-blue-800
+                hover:text-white font-semibold hover:shadow-md hover:shadow-sky-400"
+              >
+                <i className="fa-solid fa-right-to-bracket"></i>
+                &nbsp;&nbsp;Registrarse
+              </button>
+            </div>
+          </form>
+        </Fragment>
+        <RenderUser user={estado} />
+      </div>
     </div>
   );
 };
-
-
-
-
