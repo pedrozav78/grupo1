@@ -3,8 +3,8 @@ import { RenderUser } from "./RenderUser";
 
 export const Registro = (props) => {
   const [usuario, setNombre] = useState("");
-  const [clave, setApellido] = useState("");
   const [email, setEmail] = useState("");
+  const [clave, setClave] = useState("");
   const [estado, setEstado] = useState([]);
 
   function addUser(e) {
@@ -48,37 +48,33 @@ export const Registro = (props) => {
               />
             </div>
             <div className="mt-3">
-              <label for="apellido" className="block text-base mb-2">
-                Apellido
-              </label>
-              <input
-                onChange={(e) => setApellido(e.target.value)}
-                className="border w-full text-base px-2 py-1 focus:outline-none focus:ring-0 focus:shadow-black focus:shadow-md rounded-md border-gray-500"
-                type="text"
-                id="apellido"
-                name="apellido"
-                placeholder="Apellido"
-              />
-            </div>
-            <div className="mt-3">
               <label for="email" className="block text-base mb-2">
-                Correo
+                Email
               </label>
               <input
                 onChange={(e) => setEmail(e.target.value)}
                 className="border w-full text-base px-2 py-1 focus:outline-none focus:ring-0 focus:shadow-black focus:shadow-md rounded-md border-gray-500"
-                type="text"
+                type="email"
                 id="email"
                 name="email"
-                placeholder="Email"
+                placeholder="email"
+              />
+            </div>
+            <div className="mt-3">
+              <label for="clave" className="block text-base mb-2">
+                Clave
+              </label>
+              <input
+                onChange={(e) => setClave(e.target.value)}
+                className="border w-full text-base px-2 py-1 focus:outline-none focus:ring-0 focus:shadow-black focus:shadow-md rounded-md border-gray-500"
+                type="password"
+                id="clave"
+                name="clave"
+                placeholder="clave"
               />
             </div>
             <div className="mt-3 flex">
-              <div>
-                <a href="#" className="text-indigo-800 font-semibold">
-                  Forgot Password?
-                </a>
-              </div>
+              <div></div>
             </div>
             <div className="mt-5">
               <button

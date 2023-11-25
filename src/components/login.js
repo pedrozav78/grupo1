@@ -2,7 +2,66 @@ import React, { useState } from "react";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
-  const [pass, setPass] = useState("");
+  const [clave, setClave] = useState("");
+  const [error, setError] = useState("");
+  const [authToken, setAuthToken] = useState("");
+
+  const checkUser = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("http://localhost:8000/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: email,
+          password: clave,
+        }),
+      });
+
+      if (response.ok) {
+        // El usuario existe en la base de datos y ha iniciado sesión correctamente
+        console.log("Usuario autenticado correctamente");
+        setError("");
+        const responseData = await response.json();
+        const token = responseData.access; // Obtener el token de acceso en lugar de "token"
+
+        setAuthToken(token);
+        fetchData();
+      } else {
+        // El usuario no existe o las credenciales son incorrectas
+        const errorData = await response.json();
+        setError(errorData.detail);
+      }
+    } catch (error) {
+      console.error("Error al realizar la solicitud:", error);
+      setError("Error al comunicarse con el servidor");
+    }
+  };
+
+  // Función para realizar una solicitud autenticada al backend
+  const fetchData = async () => {
+    try {
+      const response = await fetch("http://localhost:8000/api/data", {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
+
+      if (response.ok) {
+        // La solicitud se realizó correctamente con autenticación
+        const data = await response.json();
+        console.log("Datos obtenidos:", data);
+      } else {
+        // La solicitud no se realizó correctamente, el token puede haber expirado
+        console.log("Error al obtener datos:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error al realizar la solicitud:", error);
+    }
+  };
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -36,8 +95,8 @@ export const Login = () => {
               Contraseña
             </label>
             <input
-              value={pass}
-              onChange={(e) => setPass(e.target.value)}
+              value={clave}
+              onChange={(e) => setClave(e.target.value)}
               className="border w-full text-base px-2 py-1 focus:outline-none focus:ring-0 focus:shadow-black focus:shadow-md rounded-md border-gray-500"
               type="password"
               placeholder="Contraseña"
@@ -47,9 +106,7 @@ export const Login = () => {
             </div>
             <div className="mt-3 flex">
               <div>
-                <a href="#" className="text-indigo-800 font-semibold">
-                  ¿No tienes cuenta? Registrate
-                </a>
+                
               </div>
             </div>
             <div className="mt-5">
