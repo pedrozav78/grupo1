@@ -7,7 +7,7 @@ function App() {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/users/')  // Ajustado según la configuración del back en settings.py (backend)
+    fetch('http://localhost:8000/auth/login')  // Ajustado según la configuración del back en settings.py (backend)
       .then(response => response.json())
       .then(data => setUsers(data))
       .catch(error => console.error('Error fetching users:', error));
