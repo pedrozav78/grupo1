@@ -1,15 +1,14 @@
-from django.contrib.auth.models import User
-from rest_framework import status
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
-from rest_framework.authtoken.models import Token
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.response import Response
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.authtoken.models import Token
+from rest_framework import status
 from django.shortcuts import get_object_or_404
-
-from .serializers import UserSerializer
+from django.contrib.auth.models import User
+from Auth.api.serializers import UserSerializer
 
 
 @api_view(['POST'])
