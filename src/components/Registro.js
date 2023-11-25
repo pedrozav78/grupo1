@@ -2,20 +2,20 @@ import React, { Fragment, useState } from 'react';
 import { RenderUser } from './RenderUser';
 
 export const Registro = (props) => {
-  const [nombre, setNombre] = useState('');
-  const [apellido, setApellido] = useState('');
+  const [usuario, setNombre] = useState('');
+  const [clave, setApellido] = useState('');
   const [email, setEmail] = useState('');
   const [estado, setEstado] = useState([]);
 
   function addUser(e) {
     e.preventDefault();
 
-    fetch('http://localhost:3000/api/users/', {
+    fetch('http://localhost:8000/auth/signup', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ username: nombre, password: apellido, email }),
+      body: JSON.stringify({ username: usuario, password: clave, email }),
     })
       .then(response => response.json())
       .then(data => {
