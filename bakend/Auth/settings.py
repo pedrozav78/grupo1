@@ -163,3 +163,5 @@ CORS_ALLOW_HEADERS = [
     'x-tokenizers',
     'x-requested-with',
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True
