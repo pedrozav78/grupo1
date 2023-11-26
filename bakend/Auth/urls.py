@@ -9,6 +9,6 @@ urlpatterns = [
     path('auth/signup', signup),
     path('auth/check_token', check_token),
     path('auth/get_user_data', get_user_data),
-    path('auth/edit_user/<int:user_id>/', edit_user),
-    path('auth/delete_user/<int:user_id>/', delete_user),
+    path('auth/edit_user/<str:username>/', edit_user),
+    path('auth/delete_user/<str:username>/', delete_user),
 ]

@@ -46,9 +46,9 @@ const Devs = () => {
     }
   };
 
-  const handleDeleteUser = async (userId) => {
+  const handleDeleteUser = async (username) => {
     try {
-      const response = await fetch(`http://localhost:8000/auth/delete_user/${userId}`, {
+      const response = await fetch(`http://localhost:8000/auth/delete_user/${username}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -105,7 +105,7 @@ const Devs = () => {
     const editedUser = userData.find((user) => user.id === userId);
 
     try {
-      const response = await fetch(`http://localhost:8000/auth/edit_user/${userId}`, {
+      const response = await fetch(`http://localhost:8000/auth/edit_user/${editedUser.username}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -191,7 +191,7 @@ const Devs = () => {
                     </button>
                     <button
                       className="bg-red-500 text-white py-1 px-2 rounded-md hover:bg-red-600"
-                      onClick={() => handleDeleteUser(user.id)}
+                      onClick={() => handleDeleteUser(user.username)}
                     >
                       Eliminar
                     </button>
@@ -214,6 +214,5 @@ const Devs = () => {
 };
 
 export default Devs;
-
 
 
