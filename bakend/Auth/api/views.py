@@ -60,3 +60,36 @@ def get_user_data(request):
     users = User.objects.all()
     serializer = UserSerializer(users, many=True)
     return Response(serializer.data)
+
+
+@api_view(['PUT'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
+def edit_user(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+
+    if request.user != user:
+        return Response({
+            "detail": "No tienes permiso para editar este usuario."
+        }, status=status.HTTP_403_FORBIDDEN)
+
+    serializer = UserSerializer(user, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['DELETE'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
+def delete_user(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+
+    if request.user != user:
+        return Response({
+            "detail": "No tienes permiso para eliminar este usuario."
+        }, status=status.HTTP_403_FORBIDDEN)
+
+    user.delete()
+    return Response({"detail": "Usuario eliminado exitosamente."})
