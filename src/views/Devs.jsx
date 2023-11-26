@@ -1,233 +1,106 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 
-const data = [
-  { id: 1, nombre: "Diego", correo: "diego1@gmail.com", clave: "1234"},,
-];
+const Devs = () => {
+  const [userData, setUserData] = useState([]);
+  const navigate = useNavigate();
 
-export const Devs = () => {
-  const [modalActualizar, setModalActualizar] = useState(false);
-  const [modalInsertar, setModalInsertar] = useState(false);
-  const [form, setForm] = useState({
-    id: "",
-    nombre: "",
-    correo: "",
-    clave: ""
-  });
-  const [rowData, setRowData] = useState(data);
+  useEffect(() => {
+    // Verificar si el usuario está autenticado
+    const authToken = localStorage.getItem("authToken");
+    if (!authToken) {
+      // Si no está autenticado, redirigir a la página de inicio
+      navigate("/");
+    } else {
+      // Si está autenticado, cargar datos de los usuarios registrados
+      fetchUserData();
+    }
+  }, [navigate]);
 
-  const mostrarModalActualizar = (dato) => {
-    setForm(dato);
-    setModalActualizar(true);
-  };
+  const fetchUserData = async () => {
+    try {
+      const response = await fetch("http://localhost:8000/auth/get_user_data", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
+      });
 
-  const cerrarModalActualizar = () => {
-    setModalActualizar(false);
-  };
-
-  const mostrarModalInsertar = () => {
-    setModalInsertar(true);
-  };
-
-  const cerrarModalInsertar = () => {
-    setModalInsertar(false);
-  };
-
-  const editar = (dato) => {
-    const newData = rowData.map((registro) =>
-      dato.id === registro.id ? { ...registro, ...dato } : registro
-    );
-    setRowData(newData);
-    setModalActualizar(false);
-  };
-
-  const eliminar = (dato) => {
-    const opcion = window.confirm(`¿Estás seguro que deseas eliminar el elemento ${dato.id}?`);
-    if (opcion) {
-      const newData = rowData.filter((registro) => dato.id !== registro.id);
-      setRowData(newData);
-      setModalActualizar(false);
+      if (response.ok) {
+        const data = await response.json();
+        setUserData(data);
+      } else {
+        // Mostrar notificación de error al obtener datos de usuario
+        toast.error("Error al obtener datos de usuario.");
+        console.log("Error al obtener datos de usuario:", response.statusText);
+      }
+    } catch (error) {
+      // Mostrar notificación de error al realizar la solicitud
+      toast.error("Error al realizar la solicitud al servidor.");
+      console.error("Error al realizar la solicitud:", error);
     }
   };
 
-  const insertar = () => {
-    const valorNuevo = { ...form, id: rowData.length + 1 };
-    const newList = [...rowData, valorNuevo];
-    setModalInsertar(false);
-    setRowData(newList);
+  const handleEditUser = (userId) => {
+    // Lógica para editar usuario, por ejemplo, redirigir a una página de edición
+    navigate(`/edit-user/${userId}`);
   };
 
-  const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
+  const handleDeleteUser = (userId) => {
+    // Lógica para eliminar usuario, por ejemplo, mostrar un cuadro de diálogo de confirmación
+    const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar este usuario?");
+    if (confirmDelete) {
+      // Lógica para eliminar el usuario, como hacer una solicitud DELETE al servidor
+      console.log(`Eliminar usuario con ID: ${userId}`);
+
+      // Mostrar notificación de éxito al eliminar usuario
+      toast.success("Usuario eliminado exitosamente.");
+    }
   };
 
   return (
-    <>
-      <div className="container mx-auto mt-8">
-        <button
-          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-          onClick={mostrarModalInsertar}
-        >
-          Crear
-        </button>
-        <br />
-        <br />
-        <table className="table-auto w-full">
-          <thead>
-            <tr>
-              <th className="px-4 py-2">ID</th>
-              <th className="px-4 py-2">Nombre</th>
-              <th className="px-4 py-2">Correo</th>
-              <th className="px-4 py-2">Contraseña</th>
-              <th className="px-4 py-2">Acción</th>
+    <div className="container mx-auto mt-8">
+      <h1 className="text-3xl font-semibold mb-4">Usuarios Registrados</h1>
+      <table className="min-w-full bg-white border border-gray-300">
+        <thead>
+          <tr>
+            <th className="border border-gray-300 p-2">ID</th>
+            <th className="border border-gray-300 p-2">Nombre de Usuario</th>
+            <th className="border border-gray-300 p-2">Email</th>
+            <th className="border border-gray-300 p-2">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {userData.map((user) => (
+            <tr key={user.id}>
+              <td className="border border-gray-300 p-2">{user.id}</td>
+              <td className="border border-gray-300 p-2">{user.username}</td>
+              <td className="border border-gray-300 p-2">{user.email}</td>
+              <td className="border border-gray-300 p-2">
+                {/* Botones para editar y eliminar usuarios */}
+                <button
+                  className="bg-blue-500 text-white py-1 px-2 mr-2 rounded-md hover:bg-blue-600"
+                  onClick={() => handleEditUser(user.id)}
+                >
+                  <i className="fas fa-edit"></i> Editar
+                </button>
+                <button
+                  className="bg-red-500 text-white py-1 px-2 rounded-md hover:bg-red-600"
+                  onClick={() => handleDeleteUser(user.id)}
+                >
+                  <i className="fas fa-trash"></i> Eliminar
+                </button>
+              </td>
             </tr>
-          </thead>
-
-          <tbody>
-            {rowData.map((dato) => (
-              <tr key={dato.id}>
-                <td className="border px-4 py-2">{dato.id}</td>
-                <td className="border px-4 py-2">{dato.nombre}</td>
-                <td className="border px-4 py-2">{dato.correo}</td>
-                <td className="border px-4 py-2">{dato.clave}</td>
-                <td className="border px-4 py-2">
-                  <button
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
-                    onClick={() => mostrarModalActualizar(dato)}
-                  >
-                    Editar
-                  </button>
-                  <button
-                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                    onClick={() => eliminar(dato)}
-                  >
-                    Eliminar
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      {modalActualizar && (
-        <div className="fixed top-0 left-0 flex items-center justify-center w-full h-full bg-gray-800 bg-opacity-50">
-          <div className="bg-white p-8 rounded shadow-lg">
-            <h3 className="text-lg font-bold mb-4">Editar Registro</h3>
-            <div className="mb-4">
-              <label className="block mb-2">ID:</label>
-              <input
-                className="border w-full p-2"
-                readOnly
-                type="text"
-                value={form.id}
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block mb-2">Nombre:</label>
-              <input
-                className="border w-full p-2"
-                name="nombre"
-                type="text"
-                onChange={handleChange}
-                value={form.nombre}
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block mb-2">Correo:</label>
-              <input
-                className="border w-full p-2"
-                name="correo"
-                type="text"
-                onChange={handleChange}
-                value={form.correo}
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block mb-2">Contraseña:</label>
-              <input
-                className="border w-full p-2"
-                name="clave"
-                type="text"
-                onChange={handleChange}
-                value={form.clave}
-              />
-            </div>
-            <div className="flex justify-end">
-              <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
-                onClick={() => editar(form)}
-              >
-                Editar
-              </button>
-              <button
-                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                onClick={cerrarModalActualizar}
-              >
-                Cancelar
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-      {modalInsertar && (
-        <div className="fixed top-0 left-0 flex items-center justify-center w-full h-full bg-gray-800 bg-opacity-50">
-          <div className="bg-white p-8 rounded shadow-lg">
-            <h3 className="text-lg font-bold mb-4">Crear Dev:</h3>
-            <div className="mb-4">
-              <label className="block mb-2">ID:</label>
-              <input
-                className="border w-full p-2"
-                readOnly
-                type="text"
-                value={rowData.length + 1}
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block mb-2">Nombre:</label>
-              <input
-                className="border w-full p-2"
-                name="nombre"
-                type="text"
-                onChange={handleChange}
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block mb-2">Correo:</label>
-              <input
-                className="border w-full p-2"
-                name="correo"
-                type="text"
-                onChange={handleChange}
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block mb-2">Contraseña:</label>
-              <input
-                className="border w-full p-2"
-                name="clave"
-                type="text"
-                onChange={handleChange}
-              />
-            </div>
-            <div className="flex justify-end">
-              <button
-                className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2"
-                onClick={insertar}
-              >
-                Insertar
-              </button>
-              <button
-                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                onClick={cerrarModalInsertar}
-              >
-                Cancelar
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </>
+          ))}
+        </tbody>
+      </table>
+      <ToastContainer />
+    </div>
   );
-}
+};
+
+export default Devs;
+
+

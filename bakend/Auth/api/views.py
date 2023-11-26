@@ -53,3 +53,10 @@ def signup(request):
 def check_token(request):
     return Response("Valid for {}".format(request.user.email))
 
+@api_view(['GET'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
+def get_user_data(request):
+    users = User.objects.all()
+    serializer = UserSerializer(users, many=True)
+    return Response(serializer.data)

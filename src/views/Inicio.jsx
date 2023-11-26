@@ -2,25 +2,39 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 export const Inicio = () => {
-  return (
-    <div className="bg-blue-200 min-h-screen flex items-center justify-center">
-      <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center">
-        <h1 className="text-3xl font-bold mb-4">¡Bienvenido!</h1>
-        <h1 className="text-3xl font-bold mb-4">No estás autorizado. Por favor, inicia sesión o registrate.</h1>
-        <div className="space-x-4">
+  const [showMessage, setShowMessage] = React.useState(true);
+
+ return (
+    <div className="bg-gradient-to-br from-blue-500 to-blue-700 min-h-screen flex items-center justify-center">
+      <div className="card">
+        <h1 className="text-4xl font-bold text-blue-800 mb-4">
+          ¡Bienvenido a la Aplicación!
+        </h1>
+        {showMessage && (
+          <p className="text-lg text-gray-700 mb-4">
+            Parece que no estás autorizado. Por favor, inicia sesión o regístrate.
+          </p>
+        )}
+        <div className="button-container">
           <Link
             to="/login"
-            className="bg-blue-500 text-white px-4 py-2 rounded-md"
+            className="button bg-blue-500 text-white hover:bg-blue-600"
           >
-            Ir a Login
+            Ir a Iniciar Sesión
           </Link>
           <Link
             to="/registro"
-            className="bg-green-500 text-white px-4 py-2 rounded-md"
+            className="button bg-green-500 text-white hover:bg-green-600"
           >
             Ir a Registro
           </Link>
         </div>
+        <button
+          className="text-blue-500 hover:underline focus:outline-none"
+          onClick={() => setShowMessage(false)}
+        >
+          Ocultar este mensaje
+        </button>
       </div>
     </div>
   );

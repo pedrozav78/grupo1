@@ -28,6 +28,9 @@ export const Login = () => {
         setError("");
         const token = responseData.access;
 
+        // Almacena el token en el almacenamiento local
+        localStorage.setItem("authToken", token);
+
         setAuthToken(token);
         fetchData();
         toast.success("Inicio de sesión exitoso");
