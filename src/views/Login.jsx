@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import { FaUser, FaLock, FaSignInAlt } from "react-icons/fa";
+import { SlArrowLeft, SlArrowRight } from "react-icons/sl";
 
 export const Login = () => {
   const [username, setUsername] = useState("");
@@ -29,21 +30,24 @@ export const Login = () => {
         const token = responseData.access;
 
         // Almacena el token en el almacenamiento local
-        localStorage.setItem("authToken", token);
+        sessionStorage.setItem("authToken", token);
 
         setAuthToken(token);
         fetchData();
-        toast.success("Inicio de sesión exitoso");
-        toast.success("Serás redirigido a la pestaña de Devs en unos segundos.");
+        toast.success("Inicio de sesión exitoso.");
+        toast.success(
+          "Serás redirigido a la pestaña de Devs en unos segundos."
+        );
 
         // Redirigir después de un cierto tiempo
         setTimeout(() => {
           navigate("/devs");
         }, 5000);
-
       } else {
         setError(responseData.detail || "Error de autenticación");
-        toast.error(`Error: ${responseData.detail || "Error de autenticación"}`);
+
+        // Mostrar el toast de error de autenticación aquí
+        toast.error(`Usuario/Contraseña Incorrectos.`);
       }
     } catch (error) {
       console.error("Error al realizar la solicitud:", error);
@@ -76,56 +80,61 @@ export const Login = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gradient-to-br from-blue-700 to-blue-800">
+    <div className="flex justify-center items-center h-screen bg-gradient-to-br from-blue-800 to-blue-500">
       <div className="w-full lg:w-3/4 xl:w-1/2 p-6 shadow-lg bg-white rounded-md flex relative overflow-hidden">
-        <div className="w-full lg:w-2/3 relative z-10">
-          <h1 className="text-3xl text-center font-semibold text-blue-800">
-            <i className="fas fa-user"></i> Inicio de Sesión
+        <div className="w-full lg:w-2/3 relative z-10 pr-9 pl-6">
+          <h1 className="text-3xl text-center font-semibold text-blue-800 flex items-center justify-center">
+            <SlArrowLeft className="mr-1" />
+            Inicio de Sesión
+            <SlArrowRight className="ml-1" />
           </h1>
           <hr className="my-4 border-blue-300"></hr>
           <form onSubmit={checkUser}>
-            <div className="mt-4">
+            <div className="mt-4 relative">
               <label
                 htmlFor="username"
-                className="block text-base mb-2 text-blue-800"
+                className="flex text-base mb-2 text-blue-800"
               >
+                <FaUser className="block ml-1 mt-1 mr-1 text-black" />
                 Nombre de Usuario
               </label>
               <input
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="border w-full text-base px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md border-blue-300 focus:border-blue-500"
+                className="border w-full text-base px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md border-black focus:border-blue-500"
                 type="text"
                 id="username"
                 name="username"
-                placeholder="Nombre de Usuario"
+                placeholder="Usuario"
               />
             </div>
-            <div className="mt-4">
+            <div className="mt-4 relative">
               <label
                 htmlFor="password"
-                className="block text-base mb-2 text-blue-800"
+                className="flex text-base mb-2 text-blue-800"
               >
+                <FaLock className="block ml-1 mt-1 mr-1 text-black" />
                 Contraseña
               </label>
               <input
                 value={clave}
                 onChange={(e) => setClave(e.target.value)}
-                className="border w-full text-base px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md border-blue-300 focus:border-blue-500"
+                className="border w-full text-base px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md border-black focus:border-blue-500"
                 type="password"
-                placeholder="Contraseña"
                 id="password"
                 name="password"
+                placeholder="Contraseña"
               />
             </div>
-            {error && <p className="text-red-500 mt-2">{error}</p>}
             <div className="mt-6">
               <button
                 type="submit"
-                className="bg-blue-500 text-white py-3 w-full rounded-md hover:bg-blue-600 font-semibold shadow-md transform transition duration-300 hover:scale-105"
+                className="flex justify-center items-center bg-blue-600 text-white py-3 w-full rounded-md hover:bg-blue-700 font-semibold shadow-md transform transition duration-300 hover:scale-105 text-center align-middle"
               >
-                <i className="fas fa-sign-in-alt"></i>
-                &nbsp;&nbsp;Iniciar Sesión
+                <span className="flex items-center">
+                  <FaSignInAlt className="block mr-1" />
+                </span>
+                Iniciar Sesión
               </button>
               <p className="mt-4 text-blue-800 text-center">
                 ¿Aún no tienes cuenta?&nbsp;
@@ -151,4 +160,3 @@ export const Login = () => {
     </div>
   );
 };
-

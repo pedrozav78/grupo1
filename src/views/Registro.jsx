@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { FaUser, FaLock, FaSignInAlt } from "react-icons/fa";
+import { SlArrowLeft, SlArrowRight } from "react-icons/sl";
+import { MdEmail } from "react-icons/md";
 
 export const Registro = () => {
   const navigate = useNavigate();
@@ -13,6 +15,11 @@ export const Registro = () => {
 
   function addUser(e) {
     e.preventDefault();
+
+    if (!usuario || !email || !clave) {
+      toast.error("Los campos no pueden estar vacíos");
+      return; // Detener el proceso si hay campos vacíos
+    }
 
     fetch("http://localhost:8000/auth/signup", {
       method: "POST",
@@ -31,7 +38,9 @@ export const Registro = () => {
         console.log("User added successfully:", data);
         setEstado([...estado, data]);
         toast.success("¡Usuario registrado exitosamente!");
-        toast.success("Serás redirigido a la pestaña de Devs en unos segundos.");
+        toast.success(
+          "Serás redirigido a la pestaña de Devs en unos segundos."
+        );
 
         // Redirigir después de un cierto tiempo
         setTimeout(() => {
@@ -49,40 +58,44 @@ export const Registro = () => {
   }
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gradient-to-br from-blue-700 to-blue-800">
+    <div className="flex justify-center items-center h-screen bg-gradient-to-br from-blue-800 to-blue-500">
       <div className="w-full lg:w-3/4 xl:w-1/2 p-6 shadow-lg bg-white rounded-md flex relative overflow-hidden">
-        <div className="w-full lg:w-2/3 relative z-10">
-          <h1 className="text-3xl text-center font-semibold text-blue-800">
-            <i className="fas fa-user"></i> Registro
+        <div className="w-full lg:w-2/3 relative z-10 pr-9 pl-6">
+          <h1 className="text-3xl text-center font-semibold text-blue-800 flex items-center justify-center">
+            <SlArrowLeft className="mr-1" />
+            Registro
+            <SlArrowRight className="ml-1" />
           </h1>
-          <hr className="my-4 border-blue-300" />
+          <hr className="my-4 border-blue-300"></hr>
           <form onSubmit={(e) => addUser(e)}>
-            <div className="mt-4">
+            <div className="mt-4 relative">
               <label
                 htmlFor="nombre"
-                className="block text-base mb-2 text-blue-800"
+                className="flex text-base mb-2 text-blue-800"
               >
-                Nombre
+                <FaUser className="block ml-1 mt-1 mr-1 text-black" />
+                Nombre de Usuario
               </label>
               <input
                 onChange={(e) => setNombre(e.target.value)}
-                className="border w-full text-base px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md border-blue-300 focus:border-blue-500"
+                className="border w-full text-base px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md border-black focus:border-blue-500"
                 type="text"
                 id="nombre"
                 name="nombre"
-                placeholder="Nombre"
+                placeholder="Usuario"
               />
             </div>
             <div className="mt-4">
               <label
                 htmlFor="email"
-                className="block text-base mb-2 text-blue-800"
+                className="flex text-base mb-2 text-blue-800"
               >
-                Email
+                <MdEmail className="block ml-1 mt-1 mr-1 text-black" />
+                Correo
               </label>
               <input
                 onChange={(e) => setEmail(e.target.value)}
-                className="border w-full text-base px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md border-blue-300 focus:border-blue-500"
+                className="border w-full text-base px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md border-black focus:border-blue-500"
                 type="email"
                 id="email"
                 name="email"
@@ -92,13 +105,14 @@ export const Registro = () => {
             <div className="mt-4">
               <label
                 htmlFor="clave"
-                className="block text-base mb-2 text-blue-800"
+                className="flex text-base mb-2 text-blue-800"
               >
-                Clave
+                <FaLock className="block ml-1 mt-1 mr-1 text-black" />
+                Contraseña
               </label>
               <input
                 onChange={(e) => setClave(e.target.value)}
-                className="border w-full text-base px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md border-blue-300 focus:border-blue-500"
+                className="border w-full text-base px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md border-black focus:border-blue-500"
                 type="password"
                 id="clave"
                 name="clave"
@@ -108,10 +122,12 @@ export const Registro = () => {
             <div className="mt-6">
               <button
                 type="submit"
-                className="bg-blue-500 text-white py-3 w-full rounded-md hover:bg-blue-600 font-semibold shadow-md transform transition duration-300 hover:scale-105"
+                className="flex justify-center items-center bg-blue-600 text-white py-3 w-full rounded-md hover:bg-blue-700 font-semibold shadow-md transform transition duration-300 hover:scale-105 text-center align-middle"
               >
-                <i className="fas fa-sign-in-alt"></i>
-                &nbsp;&nbsp;Registrarse
+                <span className="flex items-center">
+                  <FaSignInAlt className="block mr-1" />
+                </span>
+                Registrarse
               </button>
               <p className="mt-4 text-blue-800 text-center">
                 ¿Ya tienes una cuenta?&nbsp;

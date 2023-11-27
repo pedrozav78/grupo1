@@ -11,7 +11,7 @@ const Devs = () => {
 
   useEffect(() => {
     // Verificar si el usuario está autenticado
-    const authToken = localStorage.getItem("authToken");
+    const authToken = sessionStorage.getItem("authToken");
     if (!authToken) {
       // Si no está autenticado, redirigir a la página de inicio
       navigate("/");
@@ -25,7 +25,7 @@ const Devs = () => {
     try {
       const response = await fetch("http://localhost:8000/auth/get_user_data", {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
         },
       });
 
@@ -51,7 +51,7 @@ const Devs = () => {
       const response = await fetch(`http://localhost:8000/auth/delete_user/${username}`, {
         method: "DELETE",
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
         },
       });
 
@@ -74,7 +74,7 @@ const Devs = () => {
 
   const handleLogout = () => {
     // Lógica para cerrar sesión
-    localStorage.removeItem("authToken");
+    sessionStorage.removeItem("authToken");
     navigate("/");
   };
 
@@ -109,7 +109,7 @@ const Devs = () => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
         },
         body: JSON.stringify(editedUser),
       });
