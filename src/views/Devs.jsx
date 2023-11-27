@@ -100,12 +100,11 @@ const Devs = () => {
     );
   };
 
-  const handleSaveEdit = async (userId) => {
-    // Lógica para guardar la edición en línea
-    const editedUser = userData.find((user) => user.id === userId);
-
+  const handleSaveEdit = async (username) => {
+    const editedUser = userData.find((user) => user.username === username);
+  
     try {
-      const response = await fetch(`http://localhost:8000/auth/edit_user/${editedUser.username}`, {
+      const response = await fetch(`http://localhost:8000/auth/edit_user/${username}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -184,14 +183,14 @@ const Devs = () => {
                 ) : (
                   <>
                     <button
-                      className="bg-blue-500 text-white py-1 px-2 mr-2 rounded-md hover:bg-blue-600"
-                      onClick={() => handleEditUser(user.id)}
+                        className="bg-blue-500 text-white py-1 px-2 mr-2 rounded-md hover:bg-blue-600"
+                        onClick={() => handleEditUser(user.username)}  
                     >
                       Editar
                     </button>
                     <button
                       className="bg-red-500 text-white py-1 px-2 rounded-md hover:bg-red-600"
-                      onClick={() => handleDeleteUser(user.username)}
+                      onClick={() => handleDeleteUser(user.username)}  
                     >
                       Eliminar
                     </button>
